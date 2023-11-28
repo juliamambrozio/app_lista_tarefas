@@ -20,7 +20,18 @@ class TarefaService {
 	}
 
 	public function recuperar() { //read
+		$query = 'select 
+			t.id_status, 
+			s.status, 
+			t.tarefa 
+		from 
+			tb_tarefas as t
+			left join tb_status as s on (t.id_status = s.id)'; //fazendo ligação entre tabelas, onde o id_status irá se conectar com o id, sendo exibido a situação da tarefa
+		$stmt = $this->conexao->prepare($query);
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_OBJ); //retornando valores para serem recuperados
 
+		
 	}
 
 	public function atualizar() { //update
