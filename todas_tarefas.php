@@ -1,6 +1,7 @@
 <?php
 
-	$acao = 'recuperar';
+	$acao = 'recuperar'; //Recuperar todas as tarefas
+	//a acção que foi estabelecida antes do require, fará parte do código
 	require 'tarefa_controller.php';
 
 	/*
@@ -26,7 +27,7 @@
 
 				//criar um form de edição
 				let form = document.createElement('form')
-				form.action = '#'
+				form.action = 'tarefa_controller.php?acao=atualizar'
 				form.method = 'post'
 				form.className = 'row'
 
@@ -57,7 +58,7 @@
 
 				//incluir button no form
 				form.appendChild(button)
-		
+
 				//teste
 				//console.log(form)
 
@@ -70,6 +71,14 @@
 				//incluir form na página
 				tarefa.insertBefore(form, tarefa[0])
 
+			}
+
+			function remover(id) {
+				location.href = 'todas_tarefas.php?acao=remover&id='+id;
+			}
+
+			function marcarRealizada(id) {
+				location.href = 'todas_tarefas.php?acao=marcarRealizada&id='+id;
 			}
 		</script>
 	</head>
@@ -104,12 +113,16 @@
 								<?php foreach($tarefas as $indice => $tarefa) { ?>
 									<div class="row mb-3 d-flex align-items-center tarefa">
 										<div class="col-sm-9" id="tarefa_<?= $tarefa->id ?>">
-											<?= $tarefa->tarefa ?> (<?= $tarefa->status ?>)
+											<?= $tarefa->tarefa ?> (<?= $tarefa->status ?>) <!-- tarefa e seus status -->
 										</div>
 										<div class="col-sm-3 mt-2 d-flex justify-content-between">
-											<i class="fas fa-trash-alt fa-lg text-danger"></i>
-											<i class="fas fa-edit fa-lg text-info" onclick="editar(<?= $tarefa->id ?>, '<?= $tarefa->tarefa ?>')"></i>
-											<i class="fas fa-check-square fa-lg text-success"></i>
+											<i class="fas fa-trash-alt fa-lg text-danger" onclick="remover(<?= $tarefa->id ?>)"></i>
+
+											<!-- Se os status for pendendo ele irá exibir os ícones -->
+											<?php if($tarefa->status == 'pendente') { ?>
+												<i class="fas fa-edit fa-lg text-info" onclick="editar(<?= $tarefa->id ?>, '<?= $tarefa->tarefa ?>')"></i>
+												<i class="fas fa-check-square fa-lg text-success" onclick="marcarRealizada(<?= $tarefa->id ?>)"></i>
+											<?php } ?>
 										</div>
 									</div>
 
