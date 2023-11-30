@@ -1,31 +1,91 @@
 <?php
 
-	//CONECTANDO TODOS OS ARQUIVOS
+	require "../../app_lista_tarefas/tarefa.model.php";
+	require "../../app_lista_tarefas/tarefa.service.php";
+	require "../../app_lista_tarefas/conexao.php";
 
-	require "app_lista_tarefas/tarefa.model.php";
-	require "app_lista_tarefas/tarefa.service.php";
-	require "app_lista_tarefas/conexao.php";
 
-	if(isset($_GET['acao']) && $_GET['acao'] == 'inserir'){ //pegando parâmetro da URL de "nova_tarefa"
+	$acao = isset($_GET['acao']) ? $_GET['acao'] : $acao;
 
-	$tarefa = new Tarefa();
-	$tarefa->__set('tarefa', $_POST['tarefa']);
+	if($acao == 'inserir' ) { //caso a URL retorne inserir
+		$tarefa = new Tarefa(); //chamando objeto de Tarefa
+		$tarefa->__set('tarefa', $_POST['tarefa']); //setando o valor da tarefa com a enviada pelo POST
 
-	$conexao = new Conexao();
+		$conexao = new Conexao(); //chamando objeto da conexão
 
-	$tarefaService = new TarefaService($conexao, $tarefa);
-	$tarefaService->inserir();
+		$tarefaService = new TarefaService($conexao, $tarefa); //recuperando valores do tarefa service
+		$tarefaService->inserir(); //métodos aplicados no tarefa service
 
-	//Quando a tarefa for inserida, ele irá modificar a URL ocasionando na mensagem que está programada em outra página
-	header('Location: nova_tarefa.php?inclusao=1');
-}else if($acao == 'recuperar'){ //primeiro irá colocar o conteúdo, e depois irá recuperá-lo na tela
-	$tarefa = new Tarefa();
-	$conexao = new Conexao();
+		header('Location: nova_tarefa.php?inclusao=1');
+	
+	} else if($acao == 'recuperar') {
+		
+		$tarefa = new Tarefa();
+		$conexao = new Conexao();
 
-	$tarefaService = new TarefaService($conexao, $tarefa);
+		$tarefaService = new TarefaService($conexao, $tarefa);
+		$tarefas = $tarefaService->recuperar();
+	
+	} else if($acao == 'atualizar') {
 
-	$tarefas = $tarefaService->recuperar(); //retorno feito no tarefa service
+		$tarefa = new Tarefa();
+		$tarefa->__set('id', $_POST['id'])
+			->__set('tarefa', $_POST['tarefa']);
 
-}
+		$conexao = new Conexao();
+
+		$tarefaService = new TarefaService($conexao, $tarefa);
+		if($tarefaService->atualizar()) {
+			
+			if( isset($_GET['pag']) && $_GET['pag'] == 'index') {
+				header('location: index.php');	
+			} else {
+				header('location: todas_tarefas.php');
+			}
+		}
+
+
+	} else if($acao == 'remover') {
+
+		$tarefa = new Tarefa();
+		$tarefa->__set('id', $_GET['id']);
+
+		$conexao = new Conexao();
+
+		$tarefaService = new TarefaService($conexao, $tarefa);
+		$tarefaService->remover();
+
+		if( isset($_GET['pag']) && $_GET['pag'] == 'index') {
+			header('location: index.php');	
+		} else {
+			header('location: todas_tarefas.php');
+		}
+	
+	} else if($acao == 'marcarRealizada') {
+
+		$tarefa = new Tarefa();
+		$tarefa->__set('id', $_GET['id'])->__set('id_status', 2);
+
+		$conexao = new Conexao();
+
+		$tarefaService = new TarefaService($conexao, $tarefa);
+		$tarefaService->marcarRealizada();
+
+		if( isset($_GET['pag']) && $_GET['pag'] == 'index') {
+			header('location: index.php');	
+		} else {
+			header('location: todas_tarefas.php');
+		}
+	
+	} else if($acao == 'recuperarTarefasPendentes') {
+		$tarefa = new Tarefa();
+		$tarefa->__set('id_status', 1);
+		
+		$conexao = new Conexao();
+
+		$tarefaService = new TarefaService($conexao, $tarefa);
+		$tarefas = $tarefaService->recuperarTarefasPendentes();
+	}
+
 
 ?>
