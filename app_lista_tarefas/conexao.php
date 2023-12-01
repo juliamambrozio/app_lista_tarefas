@@ -5,7 +5,7 @@ class Conexao {
 	private $host = 'localhost';
 	private $dbname = 'app_lista_tarefas';
 	private $user = 'root';
-	private $pass = 'julia9122';
+	private $pass = '';
 
 	public function conectar() {
 		try {

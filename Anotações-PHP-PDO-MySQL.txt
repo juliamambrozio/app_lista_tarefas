@@ -1,0 +1,21 @@
+Colocar fora do htdocs: app_lista_tarefas (que está dentro da pasta)
+
+APP LISTA TAREFAS: mexendo com classe e métodos mágico get e set, conexão 
+com o BD utilizando class, enviando dados: method, post, actio e name, 
+conectando tudo em um arquivo só (tarefa controller), inserindo dados e 
+exibindo mensagem de sucesso, recuperando parâmetros através do Get, 
+recuperando registros, crando editar tarefa, capturando id do elemento, 
+atualizar dados, removendo tarefa, marcar como realizada e exibir apenas 
+tarefas pendentes e não exibir ícones para tarefas realizadas
+
+PHP com PDO e MySQL--------------------------------------------------------------
+
+PDO: conjunto de objetos para comunicação com o BD, um padrão
+
+- ativ1: Conexão com o BD, tratando erro de conexão (pegando código do erro e 
+onde está o erro), criando tabelas (exec), exibindo dados (query e fetchAll),
+manipular dados retornados pelo fetchAll
+-ativ2: Login, deixando o login mais seguro (códigos explicados no arquivo)
+
+- fetchAll: retorna todos os registros
+- fetch: retorna apenas um
